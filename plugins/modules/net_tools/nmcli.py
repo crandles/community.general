@@ -141,6 +141,12 @@ options:
         description:
             - This is only used with bond - ARP IP target.
         type: str
+    lacp_rate:
+        description:
+            - This is only used with bond - LACP aggregation rate.
+        type: str
+        choices: [ fast, slow ]
+        default: fast
     stp:
         description:
             - This is only used with bridge and controls whether Spanning Tree Protocol (STP) is enabled for this bridge.
@@ -587,6 +593,7 @@ class Nmcli(object):
         self.downdelay = module.params['downdelay']
         self.updelay = module.params['updelay']
         self.arp_interval = module.params['arp_interval']
+        self.lacp_rate = module.params['lacp_rate']
         self.arp_ip_target = module.params['arp_ip_target']
         self.slavepriority = module.params['slavepriority']
         self.forwarddelay = module.params['forwarddelay']
@@ -676,6 +683,7 @@ class Nmcli(object):
                 'mode': self.mode,
                 'primary': self.primary,
                 'updelay': self.updelay,
+                'lacp-rate': self.lacp_rate,
             })
         elif self.type == 'bridge':
             options.update({
@@ -1013,6 +1021,7 @@ def main():
             miimon=dict(type='int'),
             downdelay=dict(type='int'),
             updelay=dict(type='int'),
+            lacp_rate=dict(type='str', default='fast', choices=['fast', 'slow']),
             arp_interval=dict(type='int'),
             arp_ip_target=dict(type='str'),
             primary=dict(type='str'),
